@@ -5,6 +5,7 @@ import 'package:pickup_pc/src/pages/students/apps/apps_page_controller.dart';
 import 'package:pickup_pc/src/utils/my_colors.dart';
 
 import '../../../model/category.dart';
+import '../../../utils/shared_pref.dart';
 import '../../../widgets/no_data_widget.dart';
 
 class AppsPage extends StatefulWidget {
@@ -16,7 +17,10 @@ class AppsPage extends StatefulWidget {
 
 class _AppsPageState extends State<AppsPage> {
   AppsPageController _con = new AppsPageController();
+  SharedPref _sharedPref = new SharedPref();
 
+ 
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -34,7 +38,7 @@ class _AppsPageState extends State<AppsPage> {
       child: Scaffold(
         key: _con.key,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(220),
+          preferredSize: Size.fromHeight(205),
           child: AppBar(
             // title: Text('TabBar'),
             automaticallyImplyLeading: false,
@@ -67,31 +71,88 @@ class _AppsPageState extends State<AppsPage> {
             return FutureBuilder(
                 future: _con.getApps(category.id, _con.appName),
                 builder: (context, AsyncSnapshot<List<Apps>> snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data.length > 0) {
                       return GridView.builder(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 6, childAspectRatio: 0.7),
+                                  crossAxisCount: 2, childAspectRatio: 0.9),
                           itemCount: snapshot.data?.length ?? 0,
                           itemBuilder: (_, index) {
                             return _cardApps(snapshot.data[index]);
                           });
-                    } else {
-                      return NoDataWidget(text: 'No hay productos');
-                    }
-                  } else {
-                    return NoDataWidget(text: 'No hay productos');
-                  }
-                });
+                    } 
+                );
           }).toList(),
         ),
       ),
     );
   }
 
+Widget _cardApps(Apps app) {
+    return InkWell(
+      onTap: () { 
+       _con.addToBag(app);
+    },
+      child: Container(
+        height: 250,
+        
+        child: Card(
+          
+          color: Colors.white.withOpacity(0.9),
+          elevation: 3.0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          child: Stack(
+            children: [
+              Positioned(
+                  top: -1.0,
+                  right: -1.0,
+                  
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: MyColors.primaryColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15),
+                          topRight: Radius.circular(20),
+                        )),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  )),
+              Column(
+                children: [
+                  Container(
+                    height: 150,
+                    margin: EdgeInsets.only(top: 20),
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    padding: EdgeInsets.all(20),
+                    child: FadeInImage(
+                      image: app.image1 != null
+                          ? NetworkImage(app.image1)
+                          : AssetImage('assets/img/corel.png'),
+                      fit: BoxFit.contain,
+                      fadeInDuration: Duration(milliseconds: 50),
+                      placeholder: AssetImage('assets/img/no_image.png'),
+                    ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      height: 33,
+                      child: Text(
+                        app.name ?? '',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 15, fontFamily: 'NimbusSans'),
+                      )),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
   Widget _ordersBag() {
     return GestureDetector(
       onTap: _con.goToOrders,
@@ -137,64 +198,7 @@ class _AppsPageState extends State<AppsPage> {
         ));
   }
 
-  Widget _cardApps(Apps app) {
-    return Container(
-      height: 225,
-      child: Card(
-        color: Colors.white.withOpacity(0.9),
-        elevation: 3.0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Stack(
-          children: [
-            Positioned(
-                top: -1.0,
-                right: -1.0,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      color: MyColors.primaryColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        topRight: Radius.circular(20),
-                      )),
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                )),
-            Column(
-              children: [
-                Container(
-                  height: 170,
-                  margin: EdgeInsets.only(top: 20),
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  padding: EdgeInsets.all(20),
-                  child: FadeInImage(
-                    image: app.image1 != null
-                        ? NetworkImage(app.image1)
-                        : AssetImage('assets/img/corel.png'),
-                    fit: BoxFit.contain,
-                    fadeInDuration: Duration(milliseconds: 50),
-                    placeholder: AssetImage('assets/img/no_image.png'),
-                  ),
-                ),
-                Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    height: 33,
-                    child: Text(
-                      app.name ?? '',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 15, fontFamily: 'NimbusSans'),
-                    )),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  
 
   Widget _cardAi() {
     return Container(
@@ -270,7 +274,7 @@ class _AppsPageState extends State<AppsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Nombre de usuario',
+                'Yimar Tamayo',
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,

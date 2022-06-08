@@ -45,9 +45,9 @@ class AppsProvider {
     }
   }
 
-/*  Future<List<Product>> getByCategoryAndProductName(String idCategory, String productName) async {
+  Future<List<Apps>> getByCategoryAndAppsName(String idCategory, String appName) async {
     try {
-      Uri url = Uri.http(_url, '$_api/findByCategoryAndProductName/$idCategory/$productName');
+      Uri url = Uri.http(_url, '$_api/findByCategoryAndAppName/$idCategory/$appName');
       Map<String, String> headers = {
         'Content-type': 'application/json',
         'Authorization': sessionUser.sessionToken
@@ -59,13 +59,13 @@ class AppsProvider {
         new SharedPref().logout(context, sessionUser.id);
       }
       final data = json.decode(res.body); // CATEGORIAS
-      Product product = Product.fromJsonList(data);
+      Apps product = Apps.fromJsonList(data);
       return product.toList;
     }
     catch(e) {
       print('Error: $e');
       return [];
     }
-  }*/
+  }
 
 }

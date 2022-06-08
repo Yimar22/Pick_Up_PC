@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pickup_pc/src/pages/chat/chat_page.dart';
 import 'package:pickup_pc/src/pages/login/login_page.dart';
 import 'package:pickup_pc/src/help/help_page.dart';
 import 'package:pickup_pc/src/pages/students/orders/orders_create_page.dart';
@@ -27,7 +28,8 @@ class _MyAppState extends State<MyApp> {
         'login': (BuildContext context) => LoginPage(),
         'help': (BuildContext context) => HelpPage(),
         'students/apps': (BuildContext context) => AppsPage(),
-        'students/orders': (BuildContext context) => OrdersCreatePage()
+        'students/orders': (BuildContext context) => OrdersCreatePage(),
+        'pages': (BuildContext context) => ChatPage(),
       },
       theme: ThemeData(
           primaryColor: MyColors.primaryColor,
